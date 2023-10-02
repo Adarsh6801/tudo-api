@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post, ValidationPipe } from '@nestjs/common'; // Import ValidationPipe
+import { Body, Controller, Delete, Get, Param, Patch, Post, ValidationPipe } from '@nestjs/common'; // Import ValidationPipe
 import { TodoService } from './todo.service';
 import { CreateTodoDto } from 'src/DTO/create-todo.dto';
 import { TodoStatusValidationPipe } from 'src/pipes/TodoStatusValidation.pipe';
@@ -27,5 +27,11 @@ export class TodoController {
         @Param('id') id:number
     ){
        return this.todoService.update(id,status);
+    }
+
+    // delete todo 
+    @Delete(':id')
+    deleteTodo(@Param('id') id:number){
+        return this.todoService.delete(id)
     }
 }

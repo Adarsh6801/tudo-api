@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { todo } from 'node:test';
 import { CreateTodoDto } from 'src/DTO/create-todo.dto';
@@ -25,7 +25,16 @@ export class TodoService {
     }
 
     async update(id:number, status:TodoStatus){
+
         await this.repo.update({id}, {status});
         return this.repo.findOne({ where: { id } });
+    }
+
+    async delete(id:number){
+        try{
+            return await this.repo.delete(id)
+        }catch(error){
+            throw new InternalServerErrorException('Something went wrong')
+        }
     }
 }
