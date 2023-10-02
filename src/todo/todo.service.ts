@@ -6,8 +6,8 @@ import { Repository } from 'typeorm';
 @Injectable()
 export class TodoService {
     constructor(@InjectRepository(TodoEntity) private readonly repo: Repository<TodoEntity>){}
-    
-   async getAllTudos(){
+
+   async getAllTodos(){
         return await this.repo.find()
     }
 }

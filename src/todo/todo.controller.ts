@@ -6,7 +6,7 @@ import { TodoService } from './todo.service';
 export class TodoController {
     constructor(private tudoService:TodoService) {}
     @Get()
-    getAllTudos(){
-        return this.tudoService.getAllTudos()
+    getAllTodos(){
+        return this.tudoService.getAllTodos()
     }
 }
