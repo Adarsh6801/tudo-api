@@ -9,27 +9,45 @@ import { Repository } from 'typeorm';
 export class TodoService {
     constructor(@InjectRepository(TodoEntity) private readonly repo: Repository<TodoEntity>){}
 
+    // get all todos  function 
    async getAllTodos(){
+    try{
         return await this.repo.find()
+    }catch(error){
+        throw new InternalServerErrorException('Something went wrong')
+    }
     }
 
+    // function fot creating the todo 
     async createTodo(CreateTodoDto:CreateTodoDto){
-        const todo:TodoEntity= new TodoEntity();
-        const{ title, description }= CreateTodoDto
-        todo.title=title;
-        todo.description=description;
-        todo.status=TodoStatus.OPEN;
-        
-        this.repo.create(todo);
-       return await this.repo.save(todo)
+
+        try{
+            const todo:TodoEntity= new TodoEntity();
+            const{ title, description }= CreateTodoDto
+            todo.title=title;
+            todo.description=description;
+            todo.status=TodoStatus.OPEN;
+            
+            this.repo.create(todo);
+           return await this.repo.save(todo)
+        }catch(error){
+            throw new InternalServerErrorException('Something went wrong')
+        }
     }
 
+    // function for update the todo 
     async update(id:number, status:TodoStatus){
+        try{
+            await this.repo.update({id}, {status});
+            return this.repo.findOne({ where: { id } });
+        }catch(error){
+            throw new InternalServerErrorException('Something went wrong')
 
-        await this.repo.update({id}, {status});
-        return this.repo.findOne({ where: { id } });
+        }
+
     }
 
+    // function for delete the todo 
     async delete(id:number){
         try{
             return await this.repo.delete(id)
