@@ -4,7 +4,9 @@ import { AuthController } from './auth.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from 'src/Entity/user.entity';
 import { JwtModule } from '@nestjs/jwt';
-
+import { PassportModule } from '@nestjs/passport';
+import * as dotenv from 'dotenv';
+dotenv.config();
 @Module({
   imports:[
     TypeOrmModule.forFeature([UserEntity]),
@@ -14,6 +16,9 @@ import { JwtModule } from '@nestjs/jwt';
         algorithm:'HS512',
         expiresIn:'1d'
       }
+    }),
+    PassportModule.register({
+      defaultStrategy:'jwt',
     })
   ],
   providers: [AuthService],
