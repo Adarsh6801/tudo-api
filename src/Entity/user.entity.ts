@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { TodoEntity } from "./todo.entity";
 
 @Entity({name:'users'})
 export class UserEntity{
@@ -13,4 +14,9 @@ export class UserEntity{
 
     @Column()
     salt:string;
+
+    @OneToMany(()=>TodoEntity, (todo)=>todo.user)
+    todo:TodoEntity
+
+
 }

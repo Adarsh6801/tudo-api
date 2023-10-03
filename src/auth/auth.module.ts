@@ -6,6 +6,7 @@ import { UserEntity } from 'src/Entity/user.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import * as dotenv from 'dotenv';
+import { JwtCustomStrategy } from './jwt-custom.strategy';
 dotenv.config();
 @Module({
   imports:[
@@ -21,7 +22,8 @@ dotenv.config();
       defaultStrategy:'jwt',
     })
   ],
-  providers: [AuthService],
-  controllers: [AuthController]
+  providers: [AuthService, JwtCustomStrategy],
+  controllers: [AuthController],
+  exports:[PassportModule, JwtCustomStrategy]
 })
 export class AuthModule {}
