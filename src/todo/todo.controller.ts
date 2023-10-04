@@ -27,12 +27,14 @@ export class TodoController {
     }
 
     // updating the todos 
-    @Patch(':id')
+    @Patch(":id")
     updateTodo(
-        @Body('status',TodoStatusValidationPipe) status: TodoStatus,
-        @Param('id') id:number, @User() user: UserEntity
-    ){
-       return this.todoService.update(id, status, user);
+      @Body("status", TodoStatusValidationPipe) status: TodoStatus,
+      @Param("id") id: number,
+      @User() user: UserEntity
+    ) {
+        console.log(status,'tstat');
+      return this.todoService.update(id, status, user);
     }
 
     // delete todo 

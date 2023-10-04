@@ -41,17 +41,17 @@ export class TodoService {
     }
 
     // function for update the todo 
-    async update(id:number, status:TodoStatus, user:UserEntity){
-        
-        try{
-            await this.repo.update({id, userId:user.id}, {status});
-            return this.repo.findOne({ where: { id } });
-        }catch(error){
-            throw new InternalServerErrorException('Something went wrong')
-
+    async update(id: number, status: TodoStatus, user: UserEntity) {
+        try {
+            console.log(status,'status');
+            
+          await this.repo.update({id, userId: user.id}, {status});
+          return this.repo.findOne({where:{id}});
+        } catch (err) {
+          throw new InternalServerErrorException('Something went wrong');
         }
-
-    }
+    
+      }
 
     // function for delete the todo 
     async delete(id:number, user:UserEntity){
