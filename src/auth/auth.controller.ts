@@ -16,7 +16,7 @@ constructor(private readonly authService: AuthService){}
 
     // for login 
     @Post('login')
-    signin(@Body(new ValidationPipe())loginDTO:LoginUserDTO){
-        return  this.authService.loginUser(loginDTO)
-    }
+  signin(@Body(ValidationPipe) loginDTO: LoginUserDTO) {    
+    return this.authService.loginUser(loginDTO);
+  }
 }

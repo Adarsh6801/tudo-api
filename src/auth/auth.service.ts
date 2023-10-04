@@ -33,21 +33,25 @@ export class AuthService {
     }
 
     // function for the login user 
-    async loginUser(LoginUserDTO:LoginUserDTO){
-        const {username, password}=LoginUserDTO;
-
+    async loginUser(userLoginDTO: LoginUserDTO) {
+        const {username, password} = userLoginDTO;
+    
         const user = await this.repo.findOne({ where: { username } });
-        if(!user){
-            throw new UnauthorizedException('Invalid user name')
+
+    
+        if (!user) {
+          throw new UnauthorizedException('Invalid credentials.');
         }
-        const salt=user.salt;
-        const isPasswordMatch=await bcrypt.compare(password,user.password)
-        if(isPasswordMatch){
-            const jwtPayload={username}
-            const jwtToken= await this.jwt.signAsync(jwtPayload)
-            return jwtToken
-        }else{
-            throw new UnauthorizedException('Invalid Password.')
+    
+        const isPasswordMatch = await bcrypt.compare(password, user.password)
+    
+        if (isPasswordMatch) {
+         const jwtPayload = {username};
+         const jwtToken = await this.jwt.signAsync(jwtPayload, {expiresIn: '1d', algorithm: 'HS512'});
+         return {token: jwtToken};
+        } else {
+          throw new UnauthorizedException('Invalid credentials.');
         }
-    }
+      }
+    
 }
