@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RegisterUserDto } from 'src/DTO/register-user.dto';
 import { UserEntity } from 'src/Entity/user.entity';
@@ -19,17 +19,24 @@ export class AuthService {
         const salt = await bcrypt.genSalt(12); // Generate a salt with a cost factor of 12
         const hashed = await bcrypt.hash(password, salt); // Use the generated salt to hash the password
         console.log(hashed);
-        const user:UserEntity= new UserEntity()
-        user.username=username;
-        user.password=hashed;
-        user.salt=salt;
 
-        this.repo.create(user)
-        try{
-            return await this.repo.save(user)
-        }catch(error){
-            throw new InternalServerErrorException('something went wrong, user was not created.')
+        const FoundUser=await this.repo.findOne({where:{username}})
+        if(FoundUser){
+            throw new BadRequestException('User name is already taken');
+        }else{
+            const user:UserEntity= new UserEntity()
+            user.username=username;
+            user.password=hashed;
+            user.salt=salt;
+    
+            this.repo.create(user)
+            try{
+                return await this.repo.save(user)
+            }catch(error){
+                throw new InternalServerErrorException('something went wrong, user was not created.')
+            }
         }
+        
     }
 
     // function for the login user 
